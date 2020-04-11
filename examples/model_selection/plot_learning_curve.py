@@ -26,8 +26,9 @@ from sklearn.model_selection import learning_curve
 from sklearn.model_selection import ShuffleSplit
 
 
-def plot_learning_curve(estimator, title, X, y, axes=None, ylim=None, cv=None,
-                        n_jobs=None, train_sizes=np.linspace(.1, 1.0, 5)):
+def plot_learning_curve(estimator, title, X, y, axes=None, ylim=None,
+                        cv=None, n_jobs=None, scoring=None,
+                        train_sizes=np.linspace(.1, 1.0, 5)):
     """
     Generate 3 plots: the test and training learning curve, the training
     samples vs fit times curve, the fit times vs score curve.
@@ -75,6 +76,11 @@ def plot_learning_curve(estimator, title, X, y, axes=None, ylim=None, cv=None,
         ``-1`` means using all processors. See :term:`Glossary <n_jobs>`
         for more details.
 
+    scoring : str or callable, default=None
+        A str (see model evaluation documentation) or
+        a scorer callable object / function with signature
+        ``scorer(estimator, X, y)``.
+
     train_sizes : array-like, shape (n_ticks,), dtype float or int
         Relative or absolute numbers of training examples that will be used to
         generate the learning curve. If the dtype is float, it is regarded as a
@@ -95,7 +101,8 @@ def plot_learning_curve(estimator, title, X, y, axes=None, ylim=None, cv=None,
     axes[0].set_ylabel("Score")
 
     train_sizes, train_scores, test_scores, fit_times, _ = \
-        learning_curve(estimator, X, y, cv=cv, n_jobs=n_jobs,
+        learning_curve(estimator, X, y, scoring=scoring,
+                       cv=cv, n_jobs=n_jobs,
                        train_sizes=train_sizes,
                        return_times=True)
     train_scores_mean = np.mean(train_scores, axis=1)
@@ -150,6 +157,7 @@ title = "Learning Curves (Naive Bayes)"
 cv = ShuffleSplit(n_splits=100, test_size=0.2, random_state=0)
 
 estimator = GaussianNB()
+# We will use the defacult scoring ('accuracy'), but other could be also used.
 plot_learning_curve(estimator, title, X, y, axes=axes[:, 0], ylim=(0.7, 1.01),
                     cv=cv, n_jobs=4)
 
