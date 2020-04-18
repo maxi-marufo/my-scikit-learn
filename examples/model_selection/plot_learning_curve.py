@@ -157,7 +157,9 @@ title = "Learning Curves (Naive Bayes)"
 cv = ShuffleSplit(n_splits=100, test_size=0.2, random_state=0)
 
 estimator = GaussianNB()
-# We will use the default scoring ('accuracy'), but other could be also used.
+# We will use the default GaussianNB and SVC scorers ('mean accuracy'), but
+# others could be also used.
+# You can check other scorers in the [model evaluation documentation](https://scikit-learn.org/stable/modules/model_evaluation.html)
 plot_learning_curve(estimator, title, X, y, axes=axes[:, 0], ylim=(0.7, 1.01),
                     cv=cv, n_jobs=4)
 
